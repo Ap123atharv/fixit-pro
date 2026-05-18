@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FixIt Pro | Professional Home Maintenance</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .service-card {
+            transition: all 0.3s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .wallet-badge {
+            background: linear-gradient(135deg, #6366f1 0%, #4338ca 100%);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="pb-20 md:pb-0">
+
+    <!-- Navigation -->
+    <nav class="glass-nav sticky top-0 z-50 px-4 py-3">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-2 cursor-pointer" onclick="showTab('home')">
+                <div class="bg-indigo-600 p-2 rounded-lg text-white">
+                    <i class="fas fa-tools text-xl"></i>
+                </div>
+                <span class="text-xl font-bold text-gray-800 tracking-tight">FixIt<span class="text-indigo-600">Pro</span></span>
+            </div>
+
+            <!-- Wallet (Persistent) -->
+            <div class="flex items-center space-x-4">
+                <div class="wallet-badge flex items-center space-x-3 px-4 py-2 rounded-full text-white shadow-lg cursor-pointer hover:scale-105 transition-transform" onclick="openWalletModal()">
+                    <i class="fas fa-wallet"></i>
+                    <span class="font-bold" id="wallet-balance">₹0.00</span>
+                    <i class="fas fa-plus-circle text-sm opacity-80"></i>
+                </div>
+                
+                <div class="hidden md:flex space-x-6 text-sm font-medium text-gray-600 ml-8">
+                    <button onclick="showTab('home')" class="hover:text-indigo-600 transition">Services</button>
+                    <button onclick="showTab('bookings')" class="hover:text-indigo-600 transition">My Bookings</button>
+                    <button onclick="showTab('profile')" class="hover:text-indigo-600 transition">Profile</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="max-w-7xl mx-auto px-4 py-8">
+        
+        <!-- Home / Services Tab -->
+        <section id="home" class="tab-content active space-y-8">
+            <div class="text-center md:text-left space-y-4">
+                <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900">Professional Help, <br class="md:hidden"> Just a Click Away.</h1>
+                <p class="text-gray-500 max-w-2xl">Book verified plumbers, electricians, painters, and carpenters for your home needs. Transparent pricing and instant scheduling.</p>
+            </div>
+
+            <!-- Category Filters -->
+            <div class="flex overflow-x-auto space-x-4 pb-2 no-scrollbar">
+                <button onclick="filterServices('all')" class="category-btn active bg-indigo-600 text-white px-6 py-2 rounded-full whitespace-nowrap">All</button>
+                <button onclick="filterServices('plumber')" class="category-btn bg-white border border-gray-200 text-gray-600 px-6 py-2 rounded-full whitespace-nowrap hover:border-indigo-600 transition">Plumbers</button>
+                <button onclick="filterServices('electrician')" class="category-btn bg-white border border-gray-200 text-gray-600 px-6 py-2 rounded-full whitespace-nowrap hover:border-indigo-600 transition">Electricians</button>
+                <button onclick="filterServices('painter')" class="category-btn bg-white border border-gray-200 text-gray-600 px-6 py-2 rounded-full whitespace-nowrap hover:border-indigo-600 transition">Painters</button>
+                <button onclick="filterServices('carpenter')" class="category-btn bg-white border border-gray-200 text-gray-600 px-6 py-2 rounded-full whitespace-nowrap hover:border-indigo-600 transition">Carpenters</button>
+            </div>
+
+            <!-- Providers Grid -->
+            <div id="providers-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Dynamic Content -->
+            </div>
+        </section>
+
+        <!-- Bookings Tab -->
+        <section id="bookings" class="tab-content space-y-6">
+            <div class="flex justify-between items-end">
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900">Your Bookings</h2>
+                    <p class="text-gray-500">Manage your scheduled maintenance tasks</p>
+                </div>
+                <button onclick="clearHistory()" class="text-sm text-red-500 hover:underline">Clear History</button>
+            </div>
+            
+            <div id="bookings-list" class="space-y-4">
+                <!-- Dynamic Content -->
+                <div class="bg-white p-12 rounded-2xl border border-dashed border-gray-300 text-center text-gray-400">
+                    <i class="fas fa-calendar-times text-5xl mb-4 opacity-20"></i>
+                    <p>No bookings yet. Find a service provider to get started!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Profile Tab -->
+        <section id="profile" class="tab-content">
+            <div class="max-w-2xl mx-auto bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="h-32 bg-indigo-600"></div>
+                <div class="px-8 pb-8 -mt-12">
+                    <div class="relative">
+                        <img id="profile-img" src="https://ui-avatars.com/api/?name=User&background=6366f1&color=fff&size=128" class="w-24 h-24 rounded-2xl border-4 border-white shadow-md bg-white">
+                        <button class="absolute bottom-0 right-0 md:left-20 bg-white p-1.5 rounded-full shadow border text-gray-500">
+                            <i class="fas fa-camera text-xs"></i>
+                        </button>
+                    </div>
+                    
+                    <form id="profile-form" class="mt-8 space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Full Name</label>
+                                <input type="text" id="p-name" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 outline-none" value="xyz">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Phone Number</label>
+                                <input type="tel" id="p-phone" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 outline-none" value="+91 2345678900">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Service Address</label>
+                            <textarea id="p-address" rows="3" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 outline-none">Loni, Maharashtra - 413736</textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-indigo-600 text-white font-bold py-4 rounded-xl hover:bg-indigo-700 transition shadow-lg shadow-indigo-200">Save Profile Changes</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Mobile Bottom Navigation -->
+    <div class="fixed bottom-0 left-0 right-0 md:hidden bg-white border-t border-gray-100 flex justify-around py-3 px-2 z-50">
+        <button onclick="showTab('home')" class="flex flex-col items-center space-y-1 text-indigo-600">
+            <i class="fas fa-search text-xl"></i>
+            <span class="text-[10px] font-bold">Services</span>
+        </button>
+        <button onclick="showTab('bookings')" class="flex flex-col items-center space-y-1 text-gray-400">
+            <i class="fas fa-calendar-alt text-xl"></i>
+            <span class="text-[10px] font-bold">Bookings</span>
+        </button>
+        <button onclick="showTab('profile')" class="flex flex-col items-center space-y-1 text-gray-400">
+            <i class="fas fa-user text-xl"></i>
+            <span class="text-[10px] font-bold">Profile</span>
+        </button>
+    </div>
+
+    <!-- Booking Modal -->
+    <div id="booking-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+        <div class="bg-white w-full max-w-md rounded-3xl overflow-hidden animate-in fade-in zoom-in duration-300">
+            <div id="modal-header" class="p-6 bg-indigo-600 text-white flex justify-between items-center">
+                <div>
+                    <h3 class="font-bold text-xl" id="modal-provider-name">Book Service</h3>
+                    <p class="text-indigo-100 text-xs" id="modal-provider-type">Specialist</p>
+                </div>
+                <button onclick="closeBookingModal()" class="text-white hover:bg-white/20 p-2 rounded-full transition">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="p-6 space-y-6">
+                <div class="flex items-center justify-between p-4 bg-indigo-50 rounded-2xl border border-indigo-100">
+                    <div class="text-indigo-900">
+                        <p class="text-xs uppercase font-bold tracking-widest opacity-60">Consultation Fee</p>
+                        <p class="text-2xl font-black" id="modal-price">$0.00</p>
+                    </div>
+                    <div class="text-right">
+                        <i class="fas fa-shield-alt text-indigo-600 text-2xl"></i>
+                        <p class="text-[10px] font-bold text-indigo-400">FixIt Insured</p>
+                    </div>
+                </div>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-2 uppercase">Preferred Date</label>
+                        <input type="date" id="book-date" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-2 uppercase">Time Slot</label>
+                        <select id="book-time" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 outline-none">
+                            <option>Morning (08:00 - 12:00)</option>
+                            <option>Afternoon (12:00 - 16:00)</option>
+                            <option>Evening (16:00 - 20:00)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="pt-2">
+                    <button onclick="confirmBooking()" class="w-full bg-indigo-600 text-white font-bold py-4 rounded-xl hover:bg-indigo-700 transition shadow-lg shadow-indigo-200 flex items-center justify-center space-x-2">
+                        <span>Pay & Confirm Booking</span>
+                    </button>
+                    <p class="text-center text-[10px] text-gray-400 mt-3">Payment will be deducted from your FixIt Pro Wallet.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Up Wallet Modal -->
+    <div id="wallet-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+        <div class="bg-white w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl">
+            <div class="p-8 text-center">
+                <div class="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-coins text-3xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 mb-2">Top Up Wallet</h3>
+                <p class="text-gray-500 mb-8">Add credits to your account for seamless payments.</p>
+                
+                <div class="grid grid-cols-3 gap-3 mb-8">
+                    <button onclick="addFunds(25)" class="border-2 border-gray-100 hover:border-indigo-600 py-3 rounded-2xl font-bold text-gray-700 transition">₹25</button>
+                    <button onclick="addFunds(50)" class="border-2 border-gray-100 hover:border-indigo-600 py-3 rounded-2xl font-bold text-gray-700 transition">₹50</button>
+                    <button onclick="addFunds(100)" class="border-2 border-gray-100 hover:border-indigo-600 py-3 rounded-2xl font-bold text-gray-700 transition">₹100</button>
+                </div>
+                
+                <button onclick="closeWalletModal()" class="w-full bg-gray-100 text-gray-600 font-bold py-4 rounded-xl hover:bg-gray-200 transition">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-24 md:bottom-10 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-6 py-3 rounded-full text-sm font-medium shadow-2xl opacity-0 transition-opacity duration-300 pointer-events-none z-[200]">
+        Message here
+    </div>
+
+    <script>
+        // Data Store
+        const providers = [
+            { id: 1, name: "Rahul Sharma", type: "plumber", rating: 4.8, experience: 12, price: 45, img: "https://i.pravatar.cc/150?u=marcus", bio: "Leaky taps or burst pipes, I fix them all.", phone:"+917206768896" },
+            { id: 2, name: "Amit Patil", type: "electrician", rating: 4.9, experience: 8, price: 55, img: "https://i.pravatar.cc/150?u=elena", bio: "Residential wiring specialist and solar expert.",phone:"+919588196090" },
+            { id: 3, name: "Rohit Deshmukh", type: "carpenter", rating: 4.7, experience: 15, price: 40, img: "https://i.pravatar.cc/150?u=david", bio: "Master of bespoke furniture and door repairs.",phone:"+919269903796" },
+            { id: 4, name: "Sandeep Chauhan", type: "painter", rating: 4.6, experience: 6, price: 35, img: "https://i.pravatar.cc/150?u=sarah", bio: "Wall textures and professional color consulting.",phone:"+918799630191" },
+            { id: 5, name: "Ajinkya Shinde ", type: "plumber", rating: 4.5, experience: 10, price: 42, img: "https://i.pravatar.cc/150?u=mike", bio: "Expert in bathroom renovations and sewage.",phone:"+917915436437" },
+            { id: 6, name: "Swapnil Jadhav", type: "electrician", rating: 5.0, experience: 20, price: 75, img: "https://i.pravatar.cc/150?u=tom", bio: "High-voltage specialist and EV charger installer.",phone:"+918883146831" },
+            { id: 7, name: "Nitin gore", type: "painter", rating: 4.8, experience: 5, price: 38, img: "https://i.pravatar.cc/150?u=bella", bio: "Interior detailing and eco-friendly paints.",phone:"+919511765416" },
+            { id: 8, name: "Abhishek Mishra", type: "carpenter", rating: 4.9, experience: 18, price: 60, img: "https://i.pravatar.cc/150?u=arnie", bio: "Kitchen cabinet specialist and timber flooring.",phone:"+917504252896" },
+            { id: 9, name: "Suraj Shinde", type: "plumber", rating: 4.4, experience: 7, price: 39, img: "https://i.pravatar.cc/150?u=frank", bio: "General maintenance and water heater repair.",phone:"+917660971905" },
+            { id: 10, name: "Aniket Gaikwad", type: "electrician", rating: 4.7, experience: 9, price: 48, img: "https://i.pravatar.cc/150?u=victor", bio: "Quick fixes and smart home integration.",phone:"+917776241138" },
+            { id: 11, name: "Vikas Verma ", type: "carpenter", rating: 4.3, experience: 4, price: 30, img: "https://i.pravatar.cc/150?u=charlie", bio: "Apprentice level simple wood repairs and shelving.",phone:"+918762672976" },
+            { id: 12, name: "Ankur Kamble", type: "painter", rating: 4.9, experience: 11, price: 45, img: "https://i.pravatar.cc/150?u=paula", bio: "Exterior specialists and commercial painting.",phone:"+918727021138" }
+        ];
+
+        let state = {
+            wallet: 150.00,
+            bookings: [],
+            profile: {
+                name: "xyz",
+                phone: "+91 234 567 8900",
+                address: "Loni-413736"
+            },
+            selectedProvider: null
+        };
+
+        // Initialization
+        window.onload = () => {
+            loadFromStorage();
+            renderProviders();
+            updateUI();
+            
+            // Set default date to tomorrow
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            document.getElementById('book-date').value = tomorrow.toISOString().split('T')[0];
+        };
+
+        function saveToStorage() {
+            localStorage.setItem('fixit_state', JSON.stringify(state));
+        }
+
+        function loadFromStorage() {
+            const saved = localStorage.getItem('fixit_state');
+            if (saved) {
+                state = JSON.parse(saved);
+                document.getElementById('p-name').value = state.profile.name;
+                document.getElementById('p-phone').value = state.profile.phone;
+                document.getElementById('p-address').value = state.profile.address;
+                updateProfileAvatar();
+            }
+        }
+
+        // UI Handlers
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            
+            // Update Mobile Nav UI
+            document.querySelectorAll('nav button, .fixed button').forEach(btn => {
+                btn.classList.remove('text-indigo-600');
+                btn.classList.add('text-gray-400');
+            });
+            // (Simplified logic for brevity)
+            
+            if (tabId === 'bookings') renderBookings();
+        }
+
+        function renderProviders(filter = 'all') {
+            const grid = document.getElementById('providers-grid');
+            grid.innerHTML = '';
+
+            const filtered = filter === 'all' ? providers : providers.filter(p => p.type === filter);
+
+            filtered.forEach(p => {
+                const card = document.createElement('div');
+                card.className = "service-card bg-white p-5 rounded-3xl border border-gray-100 shadow-sm flex flex-col";
+                card.innerHTML = `
+                    <div class="flex items-start justify-between mb-4">
+                        <img src="${p.img}" class="w-16 h-16 rounded-2xl object-cover bg-gray-100">
+                        <div class="text-right">
+                            <span class="text-xs font-bold uppercase tracking-tighter text-indigo-500 bg-indigo-50 px-2 py-1 rounded-md">${p.type}</span>
+                            <div class="flex items-center mt-1 text-sm font-bold text-gray-800">
+                                <i class="fas fa-star text-yellow-400 mr-1"></i> ${p.rating}
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="font-bold text-gray-900 leading-tight">${p.name}</h3>
+                    <p class="text-xs text-gray-500 mt-1 line-clamp-2 mb-4">${p.bio}</p>
+                    <p class="text-xs text-gray-500 mt-1 line-clamp-2 mb-4">📞${p.phone}</p>
+                    <div class="mt-auto pt-4 border-t border-gray-50 flex items-center justify-between">
+                        <div>
+                            <p class="text-[10px] text-gray-400 font-bold uppercase">Rate</p>
+                            <p class="text-lg font-black text-gray-900">₹${p.price}<span class="text-xs font-normal text-gray-400">/hr</span></p>
+                        </div>
+                        <button onclick="openBookingModal(${p.id})" class="bg-indigo-600 text-white p-3 rounded-xl hover:bg-indigo-700 transition">
+                            <i class="fas fa-calendar-plus"></i>
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterServices(category) {
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-indigo-600', 'text-white');
+                btn.classList.add('bg-white', 'text-gray-600', 'border-gray-200');
+            });
+            event.target.classList.add('active', 'bg-indigo-600', 'text-white');
+            event.target.classList.remove('bg-white', 'text-gray-600', 'border-gray-200');
+            renderProviders(category);
+        }
+
+        // Booking Logic
+        function openBookingModal(providerId) {
+            const provider = providers.find(p => p.id === providerId);
+            state.selectedProvider = provider;
+            
+            document.getElementById('modal-provider-name').textContent = provider.name;
+            document.getElementById('modal-provider-type').textContent = `${provider.type.charAt(0).toUpperCase() + provider.type.slice(1)} • ${provider.experience}y Experience`;
+            document.getElementById('modal-price').textContent = `₹${provider.price.toFixed(2)}`;
+            document.getElementById('booking-modal').classList.remove('hidden');
+        }
+
+        function closeBookingModal() {
+            document.getElementById('booking-modal').classList.add('hidden');
+        }
+
+        function confirmBooking() {
+            const provider = state.selectedProvider;
+            const date = document.getElementById('book-date').value;
+            const time = document.getElementById('book-time').value;
+
+            if (!date) {
+                showToast("Please select a date");
+                return;
+            }
+
+            if (state.wallet < provider.price) {
+                showToast("Insufficient wallet balance!");
+                openWalletModal();
+                return;
+            }
+
+            // Process Booking
+            const newBooking = {
+                id: Date.now(),
+                providerId: provider.id,
+                providerName: provider.name,
+                providerType: provider.type,
+                price: provider.price,
+                date: date,
+                time: time,
+                status: 'Confirmed'
+            };
+
+            state.wallet -= provider.price;
+            state.bookings.unshift(newBooking);
+            saveToStorage();
+            updateUI();
+            closeBookingModal();
+            showToast("Booking Confirmed Successfully!");
+            showTab('bookings');
+        }
+
+        function renderBookings() {
+            const list = document.getElementById('bookings-list');
+            if (state.bookings.length === 0) {
+                list.innerHTML = `
+                    <div class="bg-white p-12 rounded-2xl border border-dashed border-gray-300 text-center text-gray-400">
+                        <i class="fas fa-calendar-times text-5xl mb-4 opacity-20"></i>
+                        <p>No bookings yet. Find a service provider to get started!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            list.innerHTML = '';
+            state.bookings.forEach(b => {
+                const bookingEl = document.createElement('div');
+                bookingEl.className = "bg-white p-6 rounded-3xl border border-gray-100 shadow-sm flex items-center justify-between";
+                bookingEl.innerHTML = `
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center">
+                            <i class="fas ${getServiceIcon(b.providerType)}"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-900">${b.providerName}</h4>
+                            <p class="text-xs text-gray-500">${b.date} • ${b.time}</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-green-500 bg-green-50 px-2 py-1 rounded-md">${b.status}</span>
+                        <p class="text-sm font-bold mt-1">$${b.price.toFixed(2)}</p>
+                    </div>
+                `;
+                list.appendChild(bookingEl);
+            });
+        }
+
+        function getServiceIcon(type) {
+            switch(type) {
+                case 'plumber': return 'fa-faucet';
+                case 'electrician': return 'fa-bolt';
+                case 'painter': return 'fa-paint-brush';
+                case 'carpenter': return 'fa-hammer';
+                default: return 'fa-tools';
+            }
+        }
+
+        // Wallet Logic
+        function openWalletModal() {
+            document.getElementById('wallet-modal').classList.remove('hidden');
+        }
+
+        function closeWalletModal() {
+            document.getElementById('wallet-modal').classList.add('hidden');
+        }
+
+        function addFunds(amount) {
+            state.wallet += amount;
+            saveToStorage();
+            updateUI();
+            showToast(`₹${amount} added to your wallet!`);
+            closeWalletModal();
+        }
+
+        // Profile Logic
+        document.getElementById('profile-form').onsubmit = (e) => {
+            e.preventDefault();
+            state.profile.name = document.getElementById('p-name').value;
+            state.profile.phone = document.getElementById('p-phone').value;
+            state.profile.address = document.getElementById('p-address').value;
+            saveToStorage();
+            updateProfileAvatar();
+            showToast("Profile updated successfully!");
+        };
+
+        function updateProfileAvatar() {
+            const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(state.profile.name)}&background=6366f1&color=fff&size=128`;
+            document.getElementById('profile-img').src = avatarUrl;
+        }
+
+        // Utilities
+        function updateUI() {
+            document.getElementById('wallet-balance').textContent = `₹${state.wallet.toFixed(2)}`;
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.remove('opacity-0');
+            setTimeout(() => toast.classList.add('opacity-0'), 3000);
+        }
+
+        function clearHistory() {
+            if(confirm("Are you sure you want to clear your booking history?")) {
+                state.bookings = [];
+                saveToStorage();
+                renderBookings();
+                showToast("Booking history cleared.");
+            }
+        }
+    </script>
+</body>
+</html>
+
